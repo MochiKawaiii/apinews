@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>VTV News Clone</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Vietnam_Television_logo_from_2013.svg/800px-Vietnam_Television_logo_from_2013.svg.png" alt="VTV Logo" height="60">
+      <span class="logo-text">VN TIN TỨC VIỆT NAM</span>
+    </div>
+    <div class="header-right">
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+      <div class="search-box">
+        <form method="post">
+          <input type="text" name="query" placeholder="Nhập từ khóa..." required>
+          <input type="date" name="from_date">
+          <select name="sort_by">
+            <option value="popularity">Popularity</option>
+            <option value="relevancy">Relevancy</option>
+            <option value="publishedAt">PublishedAt</option>
+          </select>
+          <button type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="{{ url_for('home') }}" class="{% if active_tab=='home' %}active{% endif %}">TRANG CHỦ</a></li>
+      <li><a href="{{ url_for('thoisu') }}" class="{% if active_tab=='thoisu' %}active{% endif %}">THỜI SỰ</a></li>
+      <li><a href="{{ url_for('kinhte') }}" class="{% if active_tab=='kinhte' %}active{% endif %}">KINH TẾ</a></li>
+      <li><a href="{{ url_for('thegioi') }}" class="{% if active_tab=='thegioi' %}active{% endif %}">THẾ GIỚI</a></li>
+      <li><a href="{{ url_for('thethao') }}" class="{% if active_tab=='thethao' %}active{% endif %}">THỂ THAO</a></li>
+      <li><a href="{{ url_for('giaitri') }}" class="{% if active_tab=='giaitri' %}active{% endif %}">GIẢI TRÍ</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    {% if error_message %}
+      <div class="error-message">
+        <h2>Đã xảy ra lỗi</h2>
+        <p>{{ error_message }}</p>
+      </div>
+    {% endif %}
+
+    <!-- Tên danh mục -->
+    <h2 style="text-transform: uppercase; color:#d02028; margin-bottom:20px;">{{ category_name or "Tin Tức" }}</h2>
+
+    {% if articles %}
+      <!-- Layout dạng card -->
+      <section class="news-section">
+        <h2 class="section-title">Tin tức mới nhất</h2>
+        <div class="news-grid-cards">
+          {% for article in articles %}
+            <div class="news-card">
+              <div class="news-card-img">
+                <img 
+                  src="{{ article.urlToImage or 'https://via.placeholder.com/400x250?text=No+Image' }}" 
+                  alt="Hình ảnh bài báo"
+                >
+              </div>
+              <div class="news-card-body">
+                <h3 class="news-card-title">{{ article.translated_title }}</h3>
+                <p class="news-card-desc">{{ article.translated_description }}</p>
+                <p class="news-card-time">{{ article.vn_publishedAt }}</p>
+                <a class="news-card-link" href="{{ article.url }}" target="_blank">Xem chi tiết</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% else %}
+      <p>Chưa có kết quả tìm kiếm. Vui lòng nhập từ khóa hoặc chờ hệ thống tải tin.</p>
+    {% endif %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 VTV News. Đài Truyền Hình Việt Nam</p>
+  </footer>
+
+</body>
+</html>
